@@ -1,0 +1,6 @@
+{
+    "containers.commands.build": "${containerCommand} build --pull --rm -f \"${dockerfile}\" -t ${tag} \"${context}\"",
+    "containers.environment": {
+        "DOCKER_HOST": "tcp://localhost:2375"
+    }
+}

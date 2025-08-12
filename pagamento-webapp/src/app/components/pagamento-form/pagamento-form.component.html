@@ -1,0 +1,56 @@
+<div *ngIf="showModal" class="fixed inset-0 z-50 flex items-center justify-center bg-gray-900 bg-opacity-50">
+  <div class="bg-white p-6 rounded-lg shadow-xl w-full max-w-md">
+    <div class="flex justify-between items-center mb-4">
+      <h2 class="text-xl font-bold">Novo Pagamento</h2>
+      <button (click)="fecharModal()" class="text-gray-500 hover:text-gray-800">
+        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
+        </svg>
+      </button>
+    </div>
+    <form [formGroup]="pagamentoForm" (ngSubmit)="salvarPagamento()">
+      <div class="mb-4">
+        <label class="block text-gray-700 text-sm font-bold mb-2">CPF/CNPJ</label>
+        <input formControlName="cpfCnpj" (input)="formatarCpfCnpj($event)" type="text" placeholder="CPF ou CNPJ"
+               class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline">
+        <div *ngIf="pagamentoForm.get('cpfCnpj')?.invalid && pagamentoForm.get('cpfCnpj')?.touched" class="text-red-500 text-xs mt-1">
+          CPF/CNPJ é obrigatório.
+        </div>
+      </div>
+      <div class="mb-4">
+        <label class="block text-gray-700 text-sm font-bold mb-2">Método de Pagamento</label>
+        <select formControlName="metodoPagamento"
+                class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline">
+          <option value="">Selecione...</option>
+          <option value="PIX">PIX</option>
+          <option value="BOLETO">Boleto</option>
+          <option value="CARTAO_CREDITO">Cartão de Crédito</option>
+          <option value="CARTAO_DEBITO">Cartão de Débito</option>
+        </select>
+      </div>
+      <div *ngIf="isCartao" class="mb-4">
+        <label class="block text-gray-700 text-sm font-bold mb-2">Número do Cartão</label>
+        <input formControlName="numeroCartao" type="text" placeholder="Número do Cartão"
+               class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline">
+        <div *ngIf="pagamentoForm.get('numeroCartao')?.invalid && pagamentoForm.get('numeroCartao')?.touched" class="text-red-500 text-xs mt-1">
+          Número do Cartão é obrigatório.
+        </div>
+      </div>
+      <div class="mb-4">
+        <label class="block text-gray-700 text-sm font-bold mb-2">Valor</label>
+        <input formControlName="valor" type="number" placeholder="Valor"
+               class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline">
+        <div *ngIf="pagamentoForm.get('valor')?.invalid && pagamentoForm.get('valor')?.touched" class="text-red-500 text-xs mt-1">
+          Valor é obrigatório e deve ser positivo.
+        </div>
+      </div>
+      <div class="flex items-center justify-end">
+        <button type="submit"
+                [disabled]="pagamentoForm.invalid"
+                class="bg-blue-600 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded-full focus:outline-none focus:shadow-outline transition duration-300 ease-in-out disabled:opacity-50">
+          Salvar Pagamento
+        </button>
+      </div>
+    </form>
+  </div>
+</div>

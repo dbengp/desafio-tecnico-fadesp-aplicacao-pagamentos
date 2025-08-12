@@ -1,0 +1,12 @@
+<main class="min-h-screen bg-gray-100 flex flex-col items-center py-10 font-sans">
+  <app-toast></app-toast>
+  <app-pagamento-lista
+    (novoPagamentoEvent)="openNovoPagamentoModal()"
+    (toastEvent)="showToastMessage($event.message, $event.type)">
+  </app-pagamento-lista>
+  <app-pagamento-form
+    [showModal]="showFormModal"
+    (modalClosed)="closeFormModal()"
+    (pagamentoCriado)="onPagamentoCriado()">
+  </app-pagamento-form>
+</main>
