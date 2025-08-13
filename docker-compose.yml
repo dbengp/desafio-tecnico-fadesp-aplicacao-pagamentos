@@ -1,0 +1,78 @@
+services:
+  pagamento-backend:
+    image: pagamento-restapi-image
+    container_name: pagamento-backend
+    ports:
+      - "8080:8080"
+    environment:
+      SPRING_DATA_MONGODB_URI: "mongodb://mongodb:27017/pagamentos_db"
+      SPRING_KAFKA_PRODUCER_BOOTSTRAP_SERVERS: "kafka:9092"
+      SPRING_KAFKA_CONSUMER_BOOTSTRAP_SERVERS: "kafka:9092"
+      SERVER_PORT: 8080
+      CORS_ALLOWED_ORIGIN: "http://pagamento-webapp"
+    depends_on:
+      - mongodb
+      - kafka
+    networks:
+      - pagamentos_network
+
+  kafka:
+    image: bitnami/kafka:latest
+    container_name: kafka_kraft
+    hostname: kafka
+    ports:
+      - '29092:29092'
+      - '9092:9092'
+      - '9093:9093'
+    environment:
+      KAFKA_CFG_NODE_ID: '0'
+      KAFKA_CFG_PROCESS_ROLES: 'controller,broker'
+      KAFKA_CFG_LISTENERS: 'PLAINTEXT://:9092,CONTROLLER://:9093,EXTERNAL://:29092'
+      KAFKA_CFG_ADVERTISED_LISTENERS: 'PLAINTEXT://kafka:9092,EXTERNAL://localhost:29092'
+      KAFKA_CFG_LISTENER_SECURITY_PROTOCOL_MAP: 'CONTROLLER:PLAINTEXT,PLAINTEXT:PLAINTEXT,EXTERNAL:PLAINTEXT'
+      KAFKA_CFG_CONTROLLER_QUORUM_VOTERS: '0@kafka:9093'
+      KAFKA_CFG_CONTROLLER_LISTENER_NAMES: 'CONTROLLER'
+      ALLOW_PLAINTEXT_LISTENER: 'yes'
+      KAFKA_CFG_AUTO_CREATE_TOPICS_ENABLE: 'true'
+    volumes:
+      - kafka_data:/bitnami/kafka/data
+    networks:
+      - pagamentos_network
+
+  mongodb:
+    image: "bitnami/mongodb:latest"
+    container_name: pagamento_restapi_mongodb
+    ports:
+      - "27017:27017"
+    environment:
+      - MONGODB_REPLICA_SET_MODE=primary
+      - MONGODB_ADVERTISED_HOSTNAME=localhost
+      - ALLOW_EMPTY_PASSWORD=yes
+      - MONGODB_DATABASE=pagamentos_db
+    volumes:
+      - mongodb_data:/bitnami/mongodb
+    restart: on-failure
+    networks:
+      - pagamentos_network
+
+  pagamento-webapp:
+    image: pagamento-webapp-image
+    container_name: pagamento-webapp
+    build:
+      context: ./pagamento-webapp
+      dockerfile: Dockerfile
+    ports:
+      - "4200:80"
+    depends_on:
+      - pagamento-backend
+
+    networks:
+      - pagamentos_network
+
+volumes:
+  mongodb_data:
+  kafka_data:
+
+networks:
+  pagamentos_network:
+    driver: bridge
