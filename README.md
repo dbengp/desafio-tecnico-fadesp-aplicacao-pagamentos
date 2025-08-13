@@ -138,12 +138,13 @@ src/
 ---
 ## **Endpoints da API (Back-end)**
 
-A API RESTful oferece os seguintes endpoints:
+A API REST oferece os seguintes endpoints veja a docuemntação em http://localhost:8080/swagger-ui.html:
 
 | Método | Endpoint | Descrição |
 | :---- | :---- | :---- |
 | POST | /pagamentos | Cria um novo pagamento. |
 | GET | /pagamentos/lista | Lista todos os pagamentos com filtros opcionais (idPagamento, cpfCnpj, status). |
+|                         | na opção pelos filtros: os filtros opcionais seguem como parametros da requisição.|
 | DELETE | /pagamentos/{id} | Inativa um pagamento pelo ID. Requer que o status seja PENDENTE\_PROCESSAMENTO. |
 | PUT | /pagamentos/status | Altera o status de um pagamento. Requer um payload com idPagamento e novoStatus. |
 
@@ -157,16 +158,20 @@ A API RESTful oferece os seguintes endpoints:
 ### **Passos**
 
 1. **Clone o repositório:**  
-   Bash  
-   git clone https://github.com/dbengp/desafio-tecnico-fadesp-aplicacao-pagamentos.git
-   cd /desafio-tecnico-fadesp-aplicacao-pagamentos
+   ```
+    bash: 
+     git clone https://github.com/dbengp/desafio-tecnico-fadesp-aplicacao-pagamentos.git
+     cd /desafio-tecnico-fadesp-aplicacao-pagamentos
+   ```
 
 2. Inicie os serviços com Docker Compose:  
    O arquivo docker-compose.yml irá orquestrar o backend (Spring), o frontend (Angular), o banco de dados (MongoDB) e o serviço de mensageria (Kafka).  
-   Bash  
-   docker compose up -d
+   ```
+    bash:  
+     docker compose up -d 
+   ```
 
-3. **Acesse as Aplicações:**  
+4. **Acesse as Aplicações:**  
    * O frontend estará disponível em http://localhost:4200.  
    * A documentação da API (Swagger UI) estará disponível em http://localhost:8080/swagger-ui.html.
 
@@ -175,15 +180,14 @@ A API RESTful oferece os seguintes endpoints:
 ### **Testes do Back-end**
 
 Para executar os testes unitários do back-end, use o Gradle na pasta raiz do back-end:
-
-Bash
-
-./gradlew test
-
+   ```
+    bash:  
+     ./gradlew test 
+   ```
 ### **Testes do Front-end**
 
 Para executar os testes unitários do front-end, use o Angular CLI na pasta raiz do front-end:
-
-Bash
-
-npm test 
+   ```
+    bash:  
+     npm test 
+   ```
