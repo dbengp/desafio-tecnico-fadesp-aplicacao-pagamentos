@@ -1,0 +1,46 @@
+server:
+  port: 8080
+
+springdoc:
+  swagger-ui:
+    path: /swagger-ui.html
+    urls:
+      - name: 'API de Pagamentos'
+        url: /v3/api-docs.yaml
+    doc-expansion: none
+  api-docs:
+    path: /v3/api-docs
+    enabled: true
+  info:
+    title: pagamento-restapi
+    description: API de pagamentos.
+    version: 1.0.0
+
+spring:
+  application:
+    name: pagamento-restapi
+  data:
+    mongodb:
+      uri: mongodb://mongodb:27017/pagamentos_db
+  kafka:
+    producer:
+      bootstrap-servers: 'kafka:9092'
+      key-serializer: org.apache.kafka.common.serialization.StringSerializer
+      value-serializer: org.springframework.kafka.support.serializer.JsonSerializer
+      properties:
+        spring.json.add.type.headers: false
+    consumer:
+      bootstrap-servers: 'kafka:9092'
+      group-id: pagamento-api-consumer-group
+      auto-offset-reset: earliest
+      enable-auto-commit: false
+      key-deserializer: org.apache.kafka.common.serialization.StringDeserializer
+      value-deserializer: org.springframework.kafka.support.serializer.JsonDeserializer
+      properties:
+        spring.json.value.default.type: br.com.fadesp.desafiotecnico.backend.pagamento_restapi.persistence.model.PagamentoStatusAtualizacao
+        spring.json.trusted.packages: "*"
+
+app:
+  kafka:
+    topic-request: pagamento-status
+    topic-response: pagamento-resposta
