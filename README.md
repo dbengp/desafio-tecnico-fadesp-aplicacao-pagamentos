@@ -158,13 +158,13 @@ A API RESTful oferece os seguintes endpoints:
 
 1. **Clone o repositório:**  
    Bash  
-   git clone https://docs.github.com/articles/referencing-and-citing-content  
-   cd \[pasta do projeto\]
+   git clone https://github.com/dbengp/desafio-tecnico-fadesp-aplicacao-pagamentos.git
+   cd /desafio-tecnico-fadesp-aplicacao-pagamentos
 
 2. Inicie os serviços com Docker Compose:  
    O arquivo docker-compose.yml irá orquestrar o backend (Spring), o frontend (Angular), o banco de dados (MongoDB) e o serviço de mensageria (Kafka).  
    Bash  
-   docker-compose up \--build
+   docker compose up -d
 
 3. **Acesse as Aplicações:**  
    * O frontend estará disponível em http://localhost:4200.  
