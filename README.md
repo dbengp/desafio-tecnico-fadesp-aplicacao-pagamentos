@@ -192,3 +192,7 @@ docker exec -it pagamento_restapi_mongodb mongosh --quiet --eval 'const doc = db
    ``` 
      npm test 
    ```
+
+### imagens do backend e frontend - dockerhub:
+- https://hub.docker.com/repository/docker/dtn84docker/pagamento-webapp-image/general
+- https://hub.docker.com/repository/docker/dtn84docker/pagamento-restapi-image/general
