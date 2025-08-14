@@ -1,6 +1,6 @@
 services:
   pagamento-backend:
-    image: pagamento-restapi-image
+    image: dtn84docker/pagamento-restapi-image:latest
     container_name: pagamento-backend
     ports:
       - "8080:8080"
@@ -56,16 +56,12 @@ services:
       - pagamentos_network
 
   pagamento-webapp:
-    image: pagamento-webapp-image
+    image: dtn84docker/pagamento-webapp-image:latest
     container_name: pagamento-webapp
-    build:
-      context: ./pagamento-webapp
-      dockerfile: Dockerfile
     ports:
       - "4200:80"
     depends_on:
       - pagamento-backend
-
     networks:
       - pagamentos_network
 
