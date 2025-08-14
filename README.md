@@ -157,31 +157,42 @@ A API REST oferece os seguintes endpoints veja a docuemntação em http://localh
 
 ### **Passos**
 
-1. **Clone o repositório:**  
-   ```
-    bash: 
-     git clone https://github.com/dbengp/desafio-tecnico-fadesp-aplicacao-pagamentos.git
-     cd /desafio-tecnico-fadesp-aplicacao-pagamentos
-   ```
+1. **Clone o repositório ou use o conteúdo do arquivo docker-compose.yml em um arquivo de mesmo nome localmente:**  
 
-2. Inicie os serviços com Docker Compose:  
-   O arquivo docker-compose.yml irá orquestrar o backend (Spring), o frontend (Angular), o banco de dados (MongoDB) e o serviço de mensageria (Kafka).  
-   ```
-    bash:  
-     docker compose up -d 
-   ```
+   ```
+    bash: 
+     git clone https://github.com/dbengp/desafio-tecnico-fadesp-aplicacao-pagamentos.git
+     cd /desafio-tecnico-fadesp-aplicacao-pagamentos
+   ```
+2. Inicie os serviços com Docker Compose:  
 
-4. **Acesse as Aplicações:**  
-   * O frontend estará disponível em http://localhost:4200.  
-   * A documentação da API (Swagger UI) estará disponível em http://localhost:8080/swagger-ui.html.
+   O arquivo docker-compose.yml irá orquestrar o backend (Spring), o frontend (Angular), o banco de dados (MongoDB) e o serviço de mensageria (Kafka).  
 
+   ```
+    bash:  
+     docker compose up -d 
+   ```
+3. **Acesse as Aplicações:**  
+   * O frontend estará disponível em http://localhost:4200.  
+   * A documentação da API (Swagger UI) estará disponível em http://localhost:8080/swagger-ui.html.
+
+4. **Kafka** : Execute o comando abaixo para simular o processamento de um pagamento e enviar a resposta para o backend. O backend irá consumir esta mensagem para atualizar o status do pagamento no MongoDB.
+```
+bash:
+echo '{"idPagamento": 1234567, "novoStatus": "PROCESSADO_SUCESSO"}' | docker exec -i kafka_kraft kafka-console-producer.sh --bootstrap-server localhost:9092 --topic pagamento-resposta
+```
+5. **Mongodb**: rode esse comando para verificar o status persistido do pagamento que tem um determinado idPagamento:
+```
+bash:
+docker exec -it pagamento_restapi_mongodb mongosh --quiet --eval 'const doc = db.getSiblingDB("pagamentos_db").pagamentos.findOne({idPagamento: 1234567});if (doc) {printjson({idPagamento: doc.idPagamento,status: doc.status});} else {print("Nenhum documento encontrado");}'
+``` 
 ## **Testes Unitários**
 
 ### **Testes do Back-end**
 
 Para executar os testes unitários do back-end, use o Gradle na pasta raiz do back-end:
    ```
-    bash:  
+    bash:
      ./gradlew test 
    ```
 ### **Testes do Front-end**
